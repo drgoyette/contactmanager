@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Local Weather</title>
+  <link rel="stylesheet" href="https://cdn.aerisapi.com/wxblox/aeris-wxblox.css">
+  <script src="https://cdn.aerisapi.com/wxblox/aeris-wxblox.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <!--// target DOM element where WeatherBlox will be rendered //-->
+  <div>
+    <h1><span id="title">Address, City, State</span></h1>
+  </div>
+  <div id="wxblox" class="aeris-wrapper"></div>
+
+  <script>
+    function getUrlVars(name, url) {
+      if (!url) url = window.location.href;
+      name = name.replace(/[\[\]]/g, '\\$&');
+      var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+
+    var lat = getUrlVars('lat');
+    var lon = getUrlVars('lon');
+    var title = getUrlVars('title');
+
+    // set Aeris account access keys
+    Aeris.wxblox.setAccess('IJwChrr7utrp6BFWVnJ1A', '9mU7TAc5mMTZOtRQmMLutoHQwZiFNNzFT6aD7cd6');
+    var $ = Aeris.wxblox.$;
+    // create desired WeatherBlox instance
+    var view = new Aeris.wxblox.layouts.local.Main('#wxblox', {
+      obs: {
+        advisories: {
+          enabled: true
+        },
+        threats: {
+          enabled: true
+        }
+      },
+      nearby: {
+        enabled: false
+      },
+      almanac: {
+        enabled: false
+      },
+      shortterm: {
+        request: {
+          limit: 3
+        }
+      },
+      forecast: {
+        type: "detailed"
+      },
+      viewer: {
+        animation: {
+          enabled: true,
+          autoplay: false,
+          alwaysShowPast: false,
+          alwaysShowFuture: false,
+          from: -2,
+          to: 0,
+          duration: 2,
+          endDelay: 1,
+          intervals: 10
+        },
+        controls: {
+          layers: [
+            {
+              code: "radar",
+              title: "Radar"
+            }, {
+              code: "satellite",
+              title: "Satellite"
+            }, {
+              code: "alerts",
+              title: "Advisories"
+            }, {
+              code: "temperatures,clip-us-flat",
+              title: "Temps"
+            }
+          ],
+          regions: [
+            {
+              zoom: 7,
+              title: "Local"
+            }, {
+              zoom: 5,
+              title: "Regional"
+            }
+          ]
+        }
+      }
+    });
+
+    coordinates = [lat, lon];
+
+    // load data and render the view for a specific location
+    view.load({
+      p: coordinates.join()
+    });
+
+    $('#title').html(title);
+
+  </script>
+</body>
+
+</html>

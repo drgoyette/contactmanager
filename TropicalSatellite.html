@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Atlantic Satellite</title>
+  <link rel="stylesheet" href="https://cdn.aerisapi.com/wxblox/aeris-wxblox.css">
+  <script src="https://cdn.aerisapi.com/wxblox/aeris-wxblox.min.js"></script>
+  <style>
+    #wxblox {
+      width: 800px;
+      height: 600px;
+    }
+  </style>
+</head>
+<!--// target DOM element where WeatherBlox will be rendered //-->
+
+<body>
+  <div id="wxblox" class="aeris-wrapper"></div>
+  <script>
+    // set Aeris account access keys
+    Aeris.wxblox.setAccess('IJwChrr7utrp6BFWVnJ1A', '9mU7TAc5mMTZOtRQmMLutoHQwZiFNNzFT6aD7cd6');
+
+    // create desired WeatherBlox instance
+    var view = new Aeris.wxblox.views.MapViewer('#wxblox', {
+      map: {
+        loc: "30.7513,-65.7676",
+        layers: {
+          base: "flat",
+          data: "satellite-infrared-color",
+          overlays: "admin"
+        },
+        zoom: 4,
+        size: {
+          width: "auto",
+          height: "auto",
+          factor: .75,
+          autoscale: false
+        }
+      },
+      animation: {
+        enabled: true,
+        autoplay: false,
+        alwaysShowPast: false,
+        alwaysShowFuture: false,
+        from: -2,
+        to: 0,
+        duration: 2,
+        endDelay: 1,
+        intervals: 10
+      },
+      overlays: {
+        timestamp: "MM/DD/YYYY hh:mm A",
+        branding: {}
+      },
+      controls: {}
+    });
+
+    // load data and render the view for a specific location
+    view.load();
+
+  </script>
+</body>
+
+</html>
